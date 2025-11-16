@@ -1,0 +1,36 @@
+# Core dependencies
+#numpy
+#pandas
+#matplotlib
+#keras
+#tensorflow
+#pydot
+#pydotplus
+#graphviz
+
+# Projet V1 - BASE
+jinja2
+fastapi
+uvicorn
+python-multipart
+pandas
+matplotlib
+keras
+tensorflow
+pillow
+numpy
+httpx
+requests
+python-dotenv
+
+# Projet V2 - MONITORING
+sqlalchemy
+psycopg2-binary
+pydantic
+plotly
+pytest
+
+# Projet V3 - MLOPS
+prometheus-client #==0.19.0
+prometheus-fastapi-instrumentator #==6.1.0
+discord-webhook #==1.3.0
