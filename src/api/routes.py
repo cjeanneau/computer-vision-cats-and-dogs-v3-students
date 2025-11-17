@@ -97,13 +97,9 @@ update_db_status = None
 if ENABLE_PROMETHEUS:
     try:
         from src.monitoring.prometheus_metrics import (
-            track_prediction as _track_prediction,  # Counter predictions_total
-            track_feedback as _track_feedback,      # Counter user_feedback_total
             update_db_status as _update_db_status   # Gauge database_status
         )
         # 🔄 Renommage avec underscore pour éviter shadowing (bonne pratique)
-        track_prediction = _track_prediction
-        track_feedback = _track_feedback
         update_db_status = _update_db_status
         print("✅ Prometheus tracking functions loaded")
     except ImportError as e:
@@ -315,7 +311,7 @@ async def predict_api(
             user_comment=None
         )
         
-        update_db_status(True)
+        #update_db_status(True)
         # 📝 Retourne objet ORM PredictionFeedback avec .id auto-généré
         
         # ─────────────────────────────────────────────────────────────────────
@@ -636,8 +632,6 @@ async def health_check(db: Session = Depends(get_db)):
         db.execute(text("SELECT 1"))
         # Query minimale (pas de table nécessaire)
         # Alternative : db.execute(text("SELECT version()")) pour info version
-        if update_db_status:
-            update_db_status(True)
         
     except Exception as e:
         db_status = f"error: {str(e)}"
@@ -659,7 +653,7 @@ async def health_check(db: Session = Depends(get_db)):
     # ═════════════════════════════════════════════════════════════════════════
     # 🆕 V3 - MISE À JOUR STATUT DB DANS PROMETHEUS
     # ═════════════════════════════════════════════════════════════════════════
-    if ENABLE_PROMETHEUS:
+    if ENABLE_PROMETHEUS and update_db_status:
         try:
             update_db_status(db_connected)
             # 📊 Set cv_database_connected gauge (1 ou 0)
