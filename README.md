@@ -210,6 +210,7 @@ cp .env.example .env
 
 # 3. Lancer la stack complète
 cd docker
+cp ../.env .
 docker compose up -d
 
 # 4. Vérifier les services
@@ -316,6 +317,7 @@ git reset --hard <commit-hash>
 cd docker
 docker compose down && docker compose up -d --build
 ```
+
 
 ## 📈 Monitoring et alerting
 
