@@ -107,6 +107,20 @@ def update_db_status(is_connected: bool):
     """
     database_status.set(1 if is_connected else 0)
 
+
+# ##### AJOUT EXERCICE 1 #####
+# TODO: Créer métrique histogram pour latence
+inference_time_histogram = Histogram(
+    'cv_inference_time_seconds',
+    'Temps d\'inférence en secondes'
+)
+
+def track_inference_time(inference_time_ms: float):
+    """Enregistre le temps d'inférence"""
+    inference_time_histogram.observe(inference_time_ms / 1000)
+# ##### FIN AJOUT EXERCICE 1 #####
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 # 🎓 CONCEPTS AVANCÉS (pour aller plus loin)
 # ═══════════════════════════════════════════════════════════════════════════
