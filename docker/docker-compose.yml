@@ -27,9 +27,12 @@ services:
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-catsdogs}"]
-      
-      interval: 10s
+      # Vérifie que le serveur est prêt en utilisant l'utilisateur et la base de données
+      # définis dans les variables d'environnement.
+      # -U : Spécifie l'utilisateur (créé par POSTGRES_USER).
+      # -d : Spécifie la base de données (créée par POSTGRES_DB).
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-catsdogs} -d ${DB_NAME:-cats_dogs_db}_${STUDENT_ID:-student01} -q"]
+      interval: 10s 
       
       timeout: 5s
       
