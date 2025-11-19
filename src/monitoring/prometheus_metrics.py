@@ -120,6 +120,23 @@ def track_inference_time(inference_time_ms: float):
     inference_time_histogram.observe(inference_time_ms / 1000)
 # ##### FIN AJOUT EXERCICE 1 #####
 
+# ##### AJOUT EXERCICE 2 #####
+feedback_counter = Counter(
+    'cv_user_feedback_total',
+    'Nombre de feedbacks utilisateurs',
+    ['feedback_type']  # 'positive' ou 'negative'
+)
+def track_feedback(feedback_type: int):
+    """Incrémente le compteur de feedback utilisateur"""
+    if feedback_type not in [0, 1]:
+        raise ValueError("feedback_type must be 0 or 1")
+    
+    # Convertir l'entier en une chaîne de caractères descriptive pour le label
+    label_value = 'positive' if feedback_type == 1 else 'negative'
+    feedback_counter.labels(feedback_type=label_value).inc()
+
+# ##### FIN AJOUT EXERCICE 2 #####
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 🎓 CONCEPTS AVANCÉS (pour aller plus loin)

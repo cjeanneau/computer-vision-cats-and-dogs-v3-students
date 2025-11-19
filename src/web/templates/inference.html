@@ -211,41 +211,63 @@ document.getElementById('predictionForm').addEventListener('submit', async funct
     predictBtn.disabled = false;
 });
 
-// Fonction pour soumettre le feedback (satisfait/pas satisfait)
+// Fonction asynchrone pour soumettre le feedback (satisfait/pas satisfait)
 async function submitFeedback(feedbackValue) {
+    // 1. VÉRIFICATION PRÉLIMINAIRE
+    // On vérifie si une prédiction a bien été faite avant de pouvoir envoyer un feedback.
+    // `currentFeedbackId` est une variable globale qui stocke l'ID retourné par le serveur après une prédiction réussie.
     if (!currentFeedbackId) {
         alert('Aucune prédiction active');
-        return;
+        return; // On arrête la fonction si aucun ID n'est disponible.
     }
     
     try {
+        // 2. PRÉPARATION DES DONNÉES À ENVOYER
+        // On crée un objet FormData, qui simule un formulaire HTML.
+        // C'est la méthode standard pour envoyer des données via une requête POST.
         const formData = new FormData();
+        
+        // On ajoute l'ID de la prédiction. C'est crucial pour que le serveur sache
+        // quel enregistrement en base de données il doit mettre à jour.
         formData.append('feedback_id', currentFeedbackId);
+        
+        // On ajoute la valeur du feedback (0 ou 1).
         formData.append('user_feedback', feedbackValue);
         
+        // 3. ENVOI DE LA REQUÊTE AU SERVEUR
+        // On envoie les données à l'endpoint `/api/update-feedback` en utilisant la méthode POST.
+        // `await` met en pause la fonction jusqu'à ce que le serveur réponde.
         const response = await fetch('/api/update-feedback', {
             method: 'POST',
-            body: formData
+            body: formData // Le corps de la requête contient notre FormData.
         });
         
+        // 4. TRAITEMENT DE LA RÉPONSE DU SERVEUR
+        // `response.ok` est vrai si le code de statut HTTP est un succès (ex: 200).
         if (response.ok) {
+            // On prépare un message de confirmation personnalisé.
             const feedbackText = feedbackValue === 1 ? 'Merci pour votre retour positif ! 👍' : 'Merci pour votre retour. Nous allons nous améliorer ! 💪';
             
-            // Affichage d'un message de confirmation
+            // On crée dynamiquement un élément HTML (une alerte Bootstrap) pour afficher le message.
             const feedbackSection = document.getElementById('feedbackSection');
             const confirmMessage = document.createElement('div');
             confirmMessage.className = 'alert alert-success mt-2';
             confirmMessage.innerHTML = `<i class="bi bi-check-circle"></i> ${feedbackText}`;
+            
+            // On ajoute ce message à la page web.
             feedbackSection.appendChild(confirmMessage);
             
-            // Désactivation des boutons de feedback
+            // Pour éviter les soumissions multiples, on désactive les deux boutons de feedback.
             const feedbackButtons = feedbackSection.querySelectorAll('.btn-group button');
             feedbackButtons.forEach(btn => btn.disabled = true);
             
         } else {
+            // Si le serveur renvoie une erreur (ex: 404, 500), on l'indique à l'utilisateur.
             alert('Erreur lors de l\'envoi du feedback');
         }
     } catch (error) {
+        // 5. GESTION DES ERREURS DE CONNEXION
+        // Ce bloc s'exécute si la requête `fetch` elle-même échoue (ex: pas de réseau, serveur inaccessible).
         console.error('Erreur:', error);
         alert('Erreur de communication avec le serveur');
     }

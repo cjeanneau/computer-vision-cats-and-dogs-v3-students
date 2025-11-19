@@ -58,7 +58,7 @@ from src.database.feedback_service import FeedbackService  # 📊 CRUD feedbacks
 # Monitoring V2 (Plotly dashboards - conservé)
 from src.monitoring.dashboard_service import DashboardService  # 📈 Graphiques Plotly
 
-from src.monitoring.prometheus_metrics import track_inference_time  # 📊 V3 - Tracking Prometheus
+from src.monitoring.prometheus_metrics import track_inference_time, track_feedback # 📊 V3 - Tracking Prometheus
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 🆕 V3 - CONDITIONAL IMPORTS (activation optionnelle)
@@ -90,7 +90,7 @@ alert_high_latency = None
 alert_database_disconnected = None
 notifier = None
 track_prediction = None
-track_feedback = None
+#track_feedback = None
 update_db_status = None
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -295,6 +295,8 @@ async def predict_api(
         # ##### FIN AJOUT EXERCICE 1 #####
 
         
+
+        
         # ─────────────────────────────────────────────────────────────────────
         # 📊 FORMATAGE PROBABILITÉS (pour DB)
         # ─────────────────────────────────────────────────────────────────────
@@ -444,7 +446,11 @@ async def update_feedback(
         
         # 💾 Commit en base
         db.commit()
-        
+
+        # ##### AJOUT EXERCICE 2 #####
+        track_feedback(user_feedback)
+        # ##### FIN AJOUT EXERCICE 2 #####
+    
     except HTTPException:
         raise  # Propage les HTTPException définies ci-dessus
     except Exception as e:
