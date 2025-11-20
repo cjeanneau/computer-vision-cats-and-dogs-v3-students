@@ -103,6 +103,41 @@
       "type": "stat"
     },
     {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 3,
+      "options": {
+        "alertInstanceLabelFilter": "",
+        "alertName": "",
+        "dashboardAlerts": false,
+        "groupBy": [],
+        "groupMode": "default",
+        "maxItems": 20,
+        "showInactiveAlerts": false,
+        "sortOrder": 1,
+        "stateFilter": {
+          "error": true,
+          "firing": true,
+          "noData": false,
+          "normal": false,
+          "pending": true,
+          "recovering": true
+        },
+        "viewMode": "list"
+      },
+      "pluginVersion": "12.2.1",
+      "title": "Alertes diverses",
+      "type": "alertlist"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -164,10 +199,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
+        "h": 12,
+        "w": 8,
         "x": 0,
-        "y": 3
+        "y": 8
       },
       "id": 4,
       "options": {
@@ -218,19 +253,23 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 3
+        "h": 12,
+        "w": 7,
+        "x": 8,
+        "y": 8
       },
       "id": 5,
       "options": {
         "legend": {
           "displayMode": "list",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": true,
+          "values": [
+            "value",
+            "percent"
+          ]
         },
-        "pieType": "pie",
+        "pieType": "donut",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -249,49 +288,107 @@
       "targets": [
         {
           "editorMode": "builder",
-          "expr": "cv_user_feedback_created{feedback_type=\"positive\"}",
-          "legendFormat": "__auto",
+          "exemplar": false,
+          "expr": "cv_user_feedback_total{feedback_type=\"positive\"}",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "{{feedback_type}} feedback",
           "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "cv_user_feedback_total{feedback_type=\"negative\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{feedback_type}} feedback",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Satisfaction",
       "type": "piechart"
     },
     {
+      "datasource": {
+        "uid": "prometheus"
+      },
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 11
+        "h": 12,
+        "w": 9,
+        "x": 15,
+        "y": 8
       },
-      "id": 3,
+      "id": 6,
       "options": {
-        "alertInstanceLabelFilter": "",
-        "alertName": "",
-        "dashboardAlerts": false,
-        "groupBy": [],
-        "groupMode": "default",
-        "maxItems": 20,
-        "showInactiveAlerts": false,
-        "sortOrder": 1,
-        "stateFilter": {
-          "error": true,
-          "firing": true,
-          "noData": false,
-          "normal": false,
-          "pending": true,
-          "recovering": true
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "viewMode": "list"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "12.2.1",
-      "title": "Alertes diverses",
-      "type": "alertlist"
+      "targets": [
+        {
+          "editorMode": "builder",
+          "expr": "cv_predictions_labels_total{predicted_label=\"cat\"}",
+          "legendFormat": "{{predicted_label}}",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "editorMode": "builder",
+          "expr": "cv_predictions_labels_total{predicted_label=\"dog\"}",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "{{predicted_label}}",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Nombre de predictions par label",
+      "type": "stat"
     }
   ],
   "preload": false,
@@ -313,5 +410,5 @@
   "timezone": "",
   "title": "Computer Vision - Cats & Dogs (Workshop)",
   "uid": "cv-cats-dogs-workshop",
-  "version": 2
+  "version": 4
 }

@@ -58,7 +58,7 @@ from src.database.feedback_service import FeedbackService  # 📊 CRUD feedbacks
 # Monitoring V2 (Plotly dashboards - conservé)
 from src.monitoring.dashboard_service import DashboardService  # 📈 Graphiques Plotly
 
-from src.monitoring.prometheus_metrics import track_inference_time, track_feedback # 📊 V3 - Tracking Prometheus
+from src.monitoring.prometheus_metrics import track_inference_time, track_feedback, track_prediction # 📊 V3 - Tracking Prometheus
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 🆕 V3 - CONDITIONAL IMPORTS (activation optionnelle)
@@ -86,12 +86,12 @@ ENABLE_DISCORD = os.getenv('DISCORD_WEBHOOK_URL') is not None
 # ─────────────────────────────────────────────────────────────────────────────
 # 💡 PATTERN : Initialiser à None puis assigner conditionnellement
 # Alternative : wrapper dans try/except à chaque usage (plus verbeux)
-alert_high_latency = None
-alert_database_disconnected = None
-notifier = None
-track_prediction = None
+#alert_high_latency = None
+#alert_database_disconnected = None
+#notifier = None
+#track_prediction = None
 #track_feedback = None
-update_db_status = None
+#update_db_status = None
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 📊 IMPORT PROMETHEUS (si activé)
@@ -337,7 +337,14 @@ async def predict_api(
             "inference_time_ms": inference_time_ms,
             "feedback_id": feedback_record.id  # Pour update feedback ultérieur
         }
-        
+            
+        # ##### AJOUT metrique sur labels predits #####
+        print()
+        print(result["prediction"])
+        print()
+        track_prediction(result["prediction"].lower())
+        # ##### FIN AJOUT metrique labels #####
+
         return response_data
         
     except Exception as e:

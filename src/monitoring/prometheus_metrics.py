@@ -107,7 +107,10 @@ def update_db_status(is_connected: bool):
     """
     database_status.set(1 if is_connected else 0)
 
-
+# ═══════════════════════════════════════════════════════════════════════════
+#  AJOUT DES EXERCICES - Implémentation des métriques demandées
+# ═══════════════════════════════════════════════════════════════════════════
+#
 # ##### AJOUT EXERCICE 1 #####
 # TODO: Créer métrique histogram pour latence
 inference_time_histogram = Histogram(
@@ -134,9 +137,25 @@ def track_feedback(feedback_type: int):
     # Convertir l'entier en une chaîne de caractères descriptive pour le label
     label_value = 'positive' if feedback_type == 1 else 'negative'
     feedback_counter.labels(feedback_type=label_value).inc()
-
 # ##### FIN AJOUT EXERCICE 2 #####
 
+# ##### AJOUT metrique sur labels predits #####
+predictions_counter = Counter(
+    'cv_predictions_labels',
+    'Nombre de prédictions par label effectuées',
+    ['predicted_label']  # 'cat' ou 'dog'
+)
+
+def track_prediction(predicted_label: str):
+    """Incrémente le compteur de prédictions par label"""
+    if predicted_label not in ['cat', 'dog']:
+        raise ValueError("predicted_label must be 'cat' or 'dog'")
+    
+    predictions_counter.labels(predicted_label=predicted_label).inc()
+
+ ##### FIN AJOUT metrique labels #####
+
+# ═══════════════════════════════════════════════════════════════════════════
 
 # ═══════════════════════════════════════════════════════════════════════════
 # 🎓 CONCEPTS AVANCÉS (pour aller plus loin)

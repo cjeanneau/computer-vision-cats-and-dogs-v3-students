@@ -32,6 +32,9 @@ docker-logs: ## Affiche les logs des containers
 docker-restart: ## Redémarre tous les services
 	docker-compose -f docker/docker-compose.yml restart
 
+docker-rebuild: ## Reconstruit les images Docker et redémarre les services
+	docker-compose -f docker/docker-compose.yml up --build -d
+	
 monitor: ## Ouvre le dashboard Grafana
 	@echo "🌐 Grafana: http://localhost:3000"
 	@echo "📊 Prometheus: http://localhost:9090"
