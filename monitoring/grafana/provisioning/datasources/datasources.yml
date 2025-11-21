@@ -15,7 +15,7 @@ datasources:
   - name: PostgreSQL
     type: postgres
     access: proxy
-    url: http://postgres:5432
+    url: postgres:5432
     uid: postgres
     database: cats_dogs_db_student03
     user: catsdogs
@@ -25,4 +25,4 @@ datasources:
       postgresVersion: 1500
       timescaledb: false
     secureJsonData:
-      password: 'catsdogsPWD'
+      password: '?C@TS&D0GS!'
