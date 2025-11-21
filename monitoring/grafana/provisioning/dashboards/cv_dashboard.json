@@ -389,6 +389,51 @@
       ],
       "title": "Nombre de predictions par label",
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "postgres"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": []
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "12.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT created_at, prediction_result, ROUND(proba_cat::numeric, 2) as proba_cat, ROUND(proba_dog::numeric, 2) as proba_dog FROM predictions_feedback ORDER BY created_at DESC LIMIT 10",
+          "refId": "A"
+        }
+      ],
+      "title": "📊 Dernières Prédictions",
+      "type": "table"
     }
   ],
   "preload": false,
