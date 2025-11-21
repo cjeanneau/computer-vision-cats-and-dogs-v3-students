@@ -103,6 +103,68 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "postgres",
+        "uid": "postgres"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 2,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      },
+      "pluginVersion": "12.2.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "postgres"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT created_at, prediction_result, ROUND(proba_cat::numeric, 2) as proba_cat, ROUND(proba_dog::numeric, 2) as proba_dog FROM predictions_feedback ORDER BY created_at DESC LIMIT 10",
+          "refId": "A"
+        }
+      ],
+      "title": "📊 Dernières Prédictions",
+      "type": "table"
+    },
+    {
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -111,7 +173,7 @@
         "h": 5,
         "w": 24,
         "x": 0,
-        "y": 3
+        "y": 9
       },
       "id": 3,
       "options": {
@@ -202,7 +264,7 @@
         "h": 12,
         "w": 8,
         "x": 0,
-        "y": 8
+        "y": 14
       },
       "id": 4,
       "options": {
@@ -256,7 +318,7 @@
         "h": 12,
         "w": 7,
         "x": 8,
-        "y": 8
+        "y": 14
       },
       "id": 5,
       "options": {
@@ -344,7 +406,7 @@
         "h": 12,
         "w": 9,
         "x": 15,
-        "y": 8
+        "y": 14
       },
       "id": 6,
       "options": {
@@ -389,51 +451,6 @@
       ],
       "title": "Nombre de predictions par label",
       "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "postgres",
-        "uid": "postgres"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
-            "inspect": false
-          },
-          "mappings": []
-        }
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "cellHeight": "sm",
-        "showHeader": true
-      },
-      "pluginVersion": "12.2.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "postgres",
-            "uid": "postgres"
-          },
-          "editorMode": "code",
-          "format": "table",
-          "rawQuery": true,
-          "rawSql": "SELECT created_at, prediction_result, ROUND(proba_cat::numeric, 2) as proba_cat, ROUND(proba_dog::numeric, 2) as proba_dog FROM predictions_feedback ORDER BY created_at DESC LIMIT 10",
-          "refId": "A"
-        }
-      ],
-      "title": "📊 Dernières Prédictions",
-      "type": "table"
     }
   ],
   "preload": false,
@@ -455,5 +472,5 @@
   "timezone": "",
   "title": "Computer Vision - Cats & Dogs (Workshop)",
   "uid": "cv-cats-dogs-workshop",
-  "version": 4
+  "version": 10
 }
